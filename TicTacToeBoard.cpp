@@ -19,21 +19,47 @@ TicTacToeBoard::TicTacToeBoard()
 **/
 Piece TicTacToeBoard::toggleTurn()
 {
-  return Invalid;
+  if(turn == X){
+    return O;
+  }
+  return X;
 }
 
 /**
  * Places the piece of the current turn on the board, returns what
- * piece is placed, and toggles which Piece's turn it is. placePiece does 
+ * piece is placed, and toggles which Piece's turn it is. placePiece does
  * NOT allow to place a piece in a location where there is already a piece.
- * In that case, placePiece just returns what is already at that location. 
+ * In that case, placePiece just returns what is already at that location.
  * Out of bounds coordinates return the Piece Invalid value. When the game
  * is over, no more pieces can be placed so attempting to place a piece
  * should neither change the board nor change whose turn it is.
-**/ 
+**/
 Piece TicTacToeBoard::placePiece(int row, int column)
 {
-  return Invalid;
+  Piece temp;
+  if(getWinner() == X || getWinner() == O){
+    return temp = Invalid;
+  }
+
+  if(row >= BOARDSIZE || row < 0 || column >= BOARDSIZE || column < 0){
+    return temp = Invalid;
+  }
+  else if(getPiece(row, column) == X){
+    return temp = X;
+  }
+  else if(getPiece(row, column) == O){
+    return temp = O;
+  }
+
+  board[row][column] = turn;
+
+ //run get winner
+ if(getWinner() == X){
+   return X;
+ }
+
+  turn = toggleTurn();
+  return getPiece(row, column);
 }
 
 /**
@@ -42,7 +68,11 @@ Piece TicTacToeBoard::placePiece(int row, int column)
 **/
 Piece TicTacToeBoard::getPiece(int row, int column)
 {
-  return Invalid;
+  Piece temp;
+  if(row >= BOARDSIZE || row < 0 || column >= BOARDSIZE || column < 0){
+    return temp = Invalid;
+  }
+  return board[row][column];
 }
 
 /**
@@ -51,5 +81,42 @@ Piece TicTacToeBoard::getPiece(int row, int column)
 **/
 Piece TicTacToeBoard::getWinner()
 {
+  for(int i = 0; i < BOARDSIZE; i++){//checks vertical winner
+    int count = 0;
+    Piece start = board[i][0];
+    for(int j = 1; j < BOARDSIZE; j++){
+      if(start != board[i][j]){
+        break;
+      }
+      count++;
+    }
+    if(count == 2){
+      return start;
+    }
+  }
+
+  for(int j = 0; j < BOARDSIZE; j++){//checks horizontal winner
+    int count = 0;
+    Piece start = board[0][j];
+    for(int i = 1; i < BOARDSIZE; i++){
+      if(start != board[i][j]){
+        break;
+      }
+
+      count++;
+    }
+    if(count == 2){
+      return start;
+    }
+  }
+
+  //checks diagnol winner
+if(board[0][0] == board[1][1] && board[1][1] == board[2][2]){
+  return board[0][0];
+}
+if(board[2][0] == board[1][1] && board[1][1] == board[0][2]){
+  return board[2][0];
+}
+
   return Invalid;
 }
